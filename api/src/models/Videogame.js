@@ -19,11 +19,6 @@ module.exports = (sequelize) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      platforms: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: false,
-        defaultValue: [],
-      },
       released: {
         type: DataTypes.STRING(10),
         allowNull: false,
@@ -36,6 +31,11 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      createdDb: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      }
     },
     { timestamps: false }
   );
