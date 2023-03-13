@@ -1,16 +1,24 @@
+const express = require('express');
+const router = express.Router();
 const { Genre } = require('../db');
 const axios = require('axios');
-require('dotenv').config();
 const { URL, API_KEY } = process.env;
 
-export const getGenres = async () => {
-  //* generos de la api
+router.get('/', async (req, res, next) => {
   let apiGenres = await axios.get(`${URL}/genres?key=${API_KEY}`);
-  apiGenres = apiGenres.data.results;
+  try {
+    //* generos de la api
+    apiGenres = apiGenres.data.results;
 
-  //* Agrega a la base de datos si no existe
-  apiGenres.forEach(
-    async (g) => await Genre.findOrCreate({ where: { name: g.name } })
-  );
-  return await Genre.findAll();
-};
+    //* Agrega a la base de datos si no existe
+    apiGenres.forEach(
+      async (g) => await Genre.findOrCreate({ where: { name: g.name } })
+    );
+    let genresDb = await Genre.findAll();
+    res.status(200).send(genresDb);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
